@@ -1,44 +1,75 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>A Vue.js Calculator</title>
-  <style>
-    p, input { font-family: monospace; }
-    p { white-space: pre; }
-  </style>
-</head>
-<body>
-  <div id="app">
-    <p>x <input v-model="x"></p>
-    <p>y <input v-model="y"></p>
-    <p>---------------------</p>
-    <p>= <span v-text="result"></span></p>
-  </div>
-
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <script type="text/javascript">
-  function isNotNumericValue(value) {
-    return isNaN(value) || !isFinite(value);
-  }
-    var calc = new Vue({
-      el: '#app',
-      data: { x: 0, y: 0, lastResult: 0 },
-      computed: {
-        result: function() {
-          let x = parseFloat(this.x);
-          if(isNotNumericValue(x))
-          return this.lastResult;
-
-          let y = parseFloat(this.y);
-          if(isNotNumericValue(y))
-          return this.lastResult;
-
-          this.lastResult = x + y;
-
-          return this.lastResult;
-        }
+  <head>
+    <title>A Vue.js Calculator</title>
+    <style>
+      p,
+      input {
+        font-family: monospace;
       }
-    });
-  </script>
-</body>
+      p {
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>x <input v-model="x" @focus="empty" @blur="zero" /></p>
+      <p>y <input v-model="y" @focus="empty" @blur="zero" /></p>
+      <p>---------------------</p>
+      <p>= <span v-text="result"></span></p>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+      var calc = new Vue({
+        el: "#app",
+        data: { x: 0, y: 0, lastResult: 0 },
+        computed: {
+          result: function() {
+            let x = parseFloat(this.x);
+            if (this.isNotNumericValue(x)) return this.lastResult;
+
+            let y = parseFloat(this.y);
+            if (this.isNotNumericValue(y)) return this.lastResult;
+
+            this.lastResult = x + y;
+
+            return this.lastResult;
+          }
+        },
+        methods: {
+          isNotNumericValue(value) {
+            return isNaN(value) || !isFinite(value);
+          },
+          getInputType(event) {
+            const inputType = event.target.parentNode.textContent;
+            if (inputType.match("x")) {
+              return "x";
+            } else {
+              return "y";
+            }
+          },
+          empty(event) {
+            let inputType = this.getInputType(event);
+            if (inputType === "x") {
+              this.x = "";
+            } else {
+              this.y = "";
+            }
+          },
+          zero(event) {
+            if (event.target.value == "") {
+              let inputType = this.getInputType(event);
+              if (inputType === "x") {
+                this.x = 0;
+              } else {
+                this.y = 0;
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </body>
 </html>
