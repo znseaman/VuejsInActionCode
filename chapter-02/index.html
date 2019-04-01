@@ -27,7 +27,7 @@
         <h1 v-text="product.title"></h1>
         <p v-html="product.description"></p>
         <p class="price">
-          {{product.price | formatPrice}}
+          {{ product.price | formatPrice }}
         </p>
       </div>
     </div>
@@ -66,6 +66,12 @@
         }
       }
 
+    },
+    methods: {
+      printMessage(){
+        alert("Help me!");
+        console.log('hello there pal!');
+      }
     },
     beforeCreate: function () {	//#B
       if (APP_LOG_LIFECYCLE_EVENTS) {	//#B
